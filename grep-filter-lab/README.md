@@ -42,7 +42,7 @@ During this activity, the following objectives were completed:
 cd logs
 
 
-## Task 1 — Search for Error Messages in a Log File
+## Task 1. Search for Error Messages in a Log File
 
 ### Searched the `server_logs.txt` file for all lines containing the word `error`
 
