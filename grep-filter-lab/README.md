@@ -34,11 +34,11 @@ During this activity, the following objectives were completed:
 
 # Investigation Process
 
-## Task 1 — Search for Error Messages in a Log File
+## Task 1. Search for Error Messages in a Log File
 
 ### Navigated to the logs directory
 
-```bash
+
 cd logs
 
 
@@ -46,9 +46,9 @@ cd logs
 
 ### Searched the `server_logs.txt` file for all lines containing the word `error`
 
-```bash
+
 grep error server_logs.txt
-```
+
 
 ### Results
 
@@ -74,7 +74,7 @@ These findings demonstrate how `grep` can assist cybersecurity professionals in 
 
 ---
 
-# Task 2 — Find Files Containing Specific Strings
+# Task 2. Find Files Containing Specific Strings
 
 ## Navigated to the users directory
 
@@ -84,13 +84,13 @@ cd /home/analyst/reports/users
 
 ## Filtered filenames containing `Q1`
 
-```bash
+
 ls | grep Q1
-```
+
 
 ### Matching Files
 
-```text
+
 Q1_access.txt
 Q1_added_users.txt
 Q1_deleted_users.txt
@@ -105,13 +105,13 @@ Q1_deleted_users.txt
 
 ## Searched for files containing the word `access`
 
-```bash
+
 ls | grep access
 ```
 
 ### Matching Files
 
-```text
+
 Q1_access.txt
 Q2_access.txt
 Q3_access.txt
@@ -129,7 +129,7 @@ Filtering filenames enables analysts to quickly locate relevant reports, access 
 
 ---
 
-# Task 3 — Search File Contents
+# Task 3. Search File Contents
 
 ## Displayed all files in the directory
 
