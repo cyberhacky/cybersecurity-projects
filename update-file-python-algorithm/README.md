@@ -165,10 +165,6 @@ update-file-python-algorithm/
 │
 ├── README.md
 ├── update_allow_list.py
-├── allow_list.txt
-
-```
-
 ---
 
 ## Future Improvements
