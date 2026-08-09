@@ -101,3 +101,23 @@ Get-Service | Where-Object {$_.Name -match "filebeat|elastic"} | Select-Object N
  ![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det3.png?raw=true)
 
  
+## Step 3: Add the Windows Integration
+
+After verifying that the Elastic Agent was running, the next step was to add the **Windows integration** to the Agent policy.
+
+The Windows integration provides the configuration required for collecting Windows event logs, including the Sysmon operational event channel used by this detection.
+
+### Add the Windows Integration
+
+In Kibana, navigate to:
+
+```text
+Fleet
+↓
+Agent policies
+↓
+Windows Agent Policy
+↓
+Add integration
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det4.png?raw=true)
