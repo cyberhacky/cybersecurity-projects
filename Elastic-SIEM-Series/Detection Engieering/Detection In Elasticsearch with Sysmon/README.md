@@ -44,3 +44,39 @@ Kibana Discover
 Elastic Security Detection Rule
     ↓
 Security Alert
+
+## Step 1: Install and Configure Sysmon
+
+The first step in building the detection was to install and configure **Microsoft Sysmon (System Monitor)** on the Windows 11 endpoint.
+
+Sysmon was required because the detection depends on detailed Windows process creation telemetry. In particular, the detection uses **Sysmon Event ID 1 (Process Create)** to identify the execution of `powershell.exe` and inspect its command-line arguments.
+
+### Why Sysmon?
+
+Windows process creation events provide important information about processes running on an endpoint. Sysmon extends this visibility by recording detailed process activity, including fields such as:
+
+- Process name
+- Process executable path
+- Process ID
+- Parent process
+- Parent process ID
+- User account
+- Command-line arguments
+- Process creation timestamp
+
+This telemetry provides the data required by the Elastic detection rule.
+
+### Sysmon Setup
+
+Sysmon was installed on the Windows 11 lab machine and configured to monitor process creation activity.
+
+After installation, the Sysmon service was started and verified to ensure that it was actively generating telemetry.
+
+The relevant Sysmon event channel used for validation was:
+
+```text
+Microsoft-Windows-Sysmon/Operational
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det1.png?raw=true)
+
+
