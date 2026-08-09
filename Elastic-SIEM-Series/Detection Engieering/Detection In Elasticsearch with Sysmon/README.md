@@ -31,17 +31,17 @@ The detection was developed, tested, and validated using the following tools and
 ### Detection Pipeline
 
 Windows 11
-↓
+
 Sysmon
-↓
+
 Elastic Agent / Filebeat
-↓
+
 Elasticsearch
-↓
+
 Kibana Discover
-↓
+
 Elastic Security Detection Rule
-↓
+
 Security Alert
 
 ## Step 1: Install and Configure Sysmon
@@ -75,3 +75,5 @@ The relevant Sysmon event channel used for validation was:
 
 ```text
 Microsoft-Windows-Sysmon/Operational
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det1.png?raw=true)
