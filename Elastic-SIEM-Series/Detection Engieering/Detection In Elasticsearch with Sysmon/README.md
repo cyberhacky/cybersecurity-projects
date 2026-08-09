@@ -111,7 +111,6 @@ The Windows integration provides the configuration required for collecting Windo
 
 In Kibana, navigate to:
 
-```text
 Fleet
 ↓
 Agent policies
