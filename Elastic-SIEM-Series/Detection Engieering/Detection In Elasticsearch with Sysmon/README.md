@@ -112,11 +112,21 @@ The Windows integration provides the configuration required for collecting Windo
 In Kibana, navigate to:
 
 Fleet
-↓
+
 Agent policies
-↓
+
 Windows Agent Policy
-↓
+
 Add integration
 
 ![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det4.png?raw=true)
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det5.png?raw=true)
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det7.png?raw=true)
+
+In the Select Integration search bar, type Windows and select it.
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det8.png?raw=true)
+
+After selecting Windows, leave the default configuration unchanged because it already includes the Sysmon Operational event log. Then click Add integration. 
