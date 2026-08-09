@@ -72,4 +72,4 @@ Sysmon was installed on the Windows 11 lab machine and configured to monitor pro
 After installation, the Sysmon service was started and verified to ensure that it was actively generating telemetry.
 
 The relevant Sysmon event channel used for validation was:
-
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det1.pngraw=true)
