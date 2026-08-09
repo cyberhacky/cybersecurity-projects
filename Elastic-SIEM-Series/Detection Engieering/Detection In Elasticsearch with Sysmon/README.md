@@ -73,5 +73,27 @@ After installation, the Sysmon service was started and verified to ensure that i
 
 The relevant Sysmon event channel used for validation was:
 
+Microsoft-Windows-Sysmon/Operational
+
+ I used the following PowerShell command to verify that Sysmon was generating Process Create events after installing:
+Get-WinEvent -FilterHashtable @{LogName="Microsoft-Windows-Sysmon/Operational"; Id=1} -MaxEvents 5
 
 ![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det1.png?raw=true)
+
+This confirmed that Sysmon was successfully running and generating the process creation telemetry required for the detection.
+
+## Step 2: Verify Elastic Agent and Sysmon Connectivity
+
+After configuring Sysmon, the next step was to verify that the **Elastic Agent** was running and able to collect the Sysmon telemetry generated on the Windows 11 endpoint.
+
+The Elastic Agent is responsible for collecting the Sysmon events and forwarding them to the Elastic environment for indexing and analysis.
+
+### Verify Elastic Agent Status
+
+The Elastic Agent service was first checked to confirm that it was running correctly on the Windows 11 endpoint.
+
+Get-Service | Where-Object {$_.Name -match "filebeat|elastic"} | Select-Object Name,DisplayName,Status,StartType
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det2.png?raw=true)
+
+ "C:\Program Files\Elastic\Agent\elastic-agent.exe" status
