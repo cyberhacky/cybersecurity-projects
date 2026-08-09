@@ -74,4 +74,4 @@ After installation, the Sysmon service was started and verified to ensure that i
 The relevant Sysmon event channel used for validation was:
 
 
-![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/DetectionEngieering/DetectionInElasticsearchwithSysmon/det1.png?raw=true)
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det1.png?raw=true)
