@@ -1,3 +1,5 @@
+# Detection #1: PowerShell Encoded Command Execution
+
 ## Detection Objective
 
 The objective of this detection is to identify the execution of PowerShell commands using the `-EncodedCommand` (`-e`) parameter on Windows endpoints.
