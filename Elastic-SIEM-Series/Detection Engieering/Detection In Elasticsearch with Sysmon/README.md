@@ -13,3 +13,34 @@ The primary objective was to validate the complete detection pipeline:
 Windows endpoint → Sysmon → Elastic Agent → Elastic Security → Detection Rule → Security Alert
 
 The detection is mapped to MITRE ATT&CK technique **T1059.001 – PowerShell** and is intended to provide analysts with an initial signal for investigating potentially suspicious PowerShell execution.
+
+## Tools Used
+
+The detection was developed, tested, and validated using the following tools and technologies:
+
+| Tool / Technology | Purpose |
+|---|---|
+| **Windows 11** | Endpoint used to generate and validate PowerShell process execution telemetry. |
+| **Sysmon** | Generated Windows process creation telemetry, specifically **Event ID 1**, for `powershell.exe`. |
+| **Elastic Agent / Filebeat** | Collected and forwarded Windows/Sysmon telemetry into Elasticsearch. |
+| **Elasticsearch** | Stored and indexed the endpoint telemetry used by the detection rule. |
+| **Elastic Security** | Used to create, execute, and validate the custom detection rule and generate security alerts. |
+| **Kibana Discover** | Used to query and inspect Sysmon events and verify the collected telemetry before creating the detection. |
+| **PowerShell** | Used to generate controlled PowerShell execution activity, including an encoded command for detection validation. |
+
+### Detection Pipeline
+
+```text
+Windows 11
+    ↓
+Sysmon
+    ↓
+Elastic Agent / Filebeat
+    ↓
+Elasticsearch
+    ↓
+Kibana Discover
+    ↓
+Elastic Security Detection Rule
+    ↓
+Security Alert
