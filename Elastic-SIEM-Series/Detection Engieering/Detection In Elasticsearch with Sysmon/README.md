@@ -176,6 +176,7 @@ The query looks for Sysmon Process Creation events (Event ID 1) where the create
 
 ![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect3.png?raw=true)
 
+This query identifies Sysmon Process Creation events where powershell.exe is executed with the -e argument.
 After defining the index pattern and custom query, the next step was to configure the detection rule itself.
 
 ### Rule Definition
@@ -183,3 +184,48 @@ After defining the index pattern and custom query, the next step was to configur
 The rule was configured as a **Custom Query** rule using the Sysmon telemetry and KQL query defined in the previous step.
 
 ![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect4.png?raw=true)
+
+### Rule Metadata or About rule
+The rule was given the name:
+
+PowerShell Encoded Command Execution
+
+The description explains the purpose of the detection:
+
+Detects Windows PowerShell process creation events where an encoded command argument is used. Encoded PowerShell commands can obscure command content and are commonly associated with defense evasion and execution techniques.
+
+The default severity was set to Medium to indicate that the behavior warrants investigation but does not, by itself, establish that malicious activity has occurred.
+
+### Rule Tags
+
+I added Tags to make the detection easier to categorize and identify during security operations.
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect5.png?raw=true)
+
+ I used these tags:
+
+PowerShell
+Sysmon
+Windows
+MITRE ATT&CK
+T1059.001
+Encoded Command
+Detection Engineering
+
+To tags associate the detection with the technology being monitored, the telemetry source, the relevant operating system, the MITRE ATT&CK technique, and the detection-engineering use case.
+
+### Schedule the Detection Rule
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect6.png?raw=true)
+
+I configured the rule to execute every 5 minutes.
+
+An additional 1-minute look-back period was configured to reduce the possibility of missing events that arrive shortly before or during a rule execution.
+
+The schedule was therefore configured as:
+
+Execution interval: 5 minutes
+Additional look-back time: 1 minute
+
+This means Elastic periodically evaluates the configured query against recent telemetry and generates an alert when matching events are identified.
+
