@@ -130,3 +130,56 @@ In the Select Integration search bar, type Windows and select it.
 ![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det8.png?raw=true)
 
 After selecting Windows, leave the default configuration unchanged because it already includes the Sysmon Operational event log. Then click Add integration. 
+
+Now that the Windows integration is configured to collect Sysmon telemetry through the Elastic Agent, the next step is to create the detection rule.
+
+In Kibana, navigate to:
+
+Security → Rules → Detection rules (SIEM)
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detection.png?raw=true)
+
+After clicking Detection rules (SIEM) click Create a rule
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det.png?raw=true)
+
+In the Create new rule window, select the first rule type, Custom query.
+
+The Custom query rule type allows us to use KQL or Lucene to search the indexed telemetry and define the conditions that should trigger our detection.
+
+For this detection, we will use a Custom query because we want to specifically identify PowerShell process creation events containing an encoded-command argument.
+
+### Configure the Rule Source
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect24.png?raw=true)
+
+Select Index Patterns as the rule's data source and include the Sysmon index:
+
+logs-windows.sysmon_operational-*
+
+This ensures that the detection rule searches the Elasticsearch indices containing the Windows Sysmon telemetry collected from the endpoint.
+
+### Define the Custom Query
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect25.png?raw=true)
+
+Under Custom query, enter the KQL query used to identify encoded PowerShell execution:
+
+event.provider:"Microsoft-Windows-Sysmon"
+and event.code:"1"
+and process.name:"powershell.exe"
+and process.args:"-e"
+
+The query looks for Sysmon Process Creation events (Event ID 1) where the created process is powershell.exe and the process arguments contain the -e parameter associated with PowerShell encoded-command execution.
+
+## Configure the Detection Rule
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect3.png?raw=true)
+
+After defining the index pattern and custom query, the next step was to configure the detection rule itself.
+
+### Rule Definition
+
+The rule was configured as a **Custom Query** rule using the Sysmon telemetry and KQL query defined in the previous step.
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect4.png?raw=true)
