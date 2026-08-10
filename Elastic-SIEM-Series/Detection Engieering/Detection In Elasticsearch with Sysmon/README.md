@@ -96,7 +96,7 @@ Get-Service | Where-Object {$_.Name -match "filebeat|elastic"} | Select-Object N
 
 ![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det2.png?raw=true)
 
- "C:\Program Files\Elastic\Agent\elastic-agent.exe" status
+ & "C:\Program Files\Elastic\Agent\elastic-agent.exe" status
 
  ![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/det3.png?raw=true)
 
