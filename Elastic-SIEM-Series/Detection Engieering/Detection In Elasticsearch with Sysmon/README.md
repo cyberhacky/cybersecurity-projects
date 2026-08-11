@@ -241,4 +241,31 @@ Now that the detection rule has been created and enabled, the next step is to te
 
 ### Testing the Detection with Atomic Red Team
 
-To validate the detection rule, I used Atomic Red Team to execute a controlled simulation of MITRE ATT&CK technique T1059.001 – PowerShell on the Windows 11 lab endpoint.
+
+To validate the detection rule, I used **Atomic Red Team** to execute a controlled simulation of **MITRE ATT&CK technique T1059.001 – PowerShell** on the Windows 11 lab endpoint.
+
+### What is Atomic Red Team?
+
+**Atomic Red Team** is a library of small, focused security tests that map to techniques in the **MITRE ATT&CK** framework. These tests allow security practitioners to simulate adversary behaviors in a controlled environment and determine whether their security controls, such as endpoint telemetry, SIEM detections, and alerting rules, can identify the activity.
+
+### Why use Atomic Red Team?
+
+Atomic Red Team was used because the detection is mapped to **T1059.001 – PowerShell.** Rather than manually executing an arbitrary test command, an Atomic Red Team test provides a structured and repeatable way to simulate PowerShell-related adversary behavior.
+
+For this validation, the objective was to confirm the complete detection workflow:
+
+Atomic Red Team Test
+        ↓
+PowerShell Execution
+        ↓
+Sysmon Event ID 1
+        ↓
+Elastic Agent
+        ↓
+Elasticsearch
+        ↓
+Elastic Detection Rule
+        ↓
+Security Alert
+
+
