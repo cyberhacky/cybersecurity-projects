@@ -229,3 +229,16 @@ Additional look-back time: 1 minute
 
 This means Elastic periodically evaluates the configured query against recent telemetry and generates an alert when matching events are identified.
 
+The next step is to configure rule actions and connectors, such as email or other notification channels, to notify analysts when the detection generates an alert. For this lab, we will leave the connector configuration unchanged and proceed by clicking Create & enable rule.
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect7.png?raw=true)
+
+
+Now that the detection rule has been created and enabled, the next step is to test the rule by executing a controlled encoded PowerShell command and verifying that the activity is detected and generates a security alert.
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect8.png?raw=true)
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect9.png?raw=true)
+
+### Testing the Detection with Atomic Red Team
+
+To validate the detection rule, I used Atomic Red Team to execute a controlled simulation of MITRE ATT&CK technique T1059.001 – PowerShell on the Windows 11 lab endpoint.
