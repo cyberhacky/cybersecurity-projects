@@ -287,3 +287,48 @@ Done executing test: T1059.001-17 PowerShell Command Execution
 This provides the controlled activity needed to test whether the Elastic detection pipeline can identify the simulated PowerShell behavior.
 
 **Important:** Successful execution of the Atomic Red Team test demonstrates that the test activity ran. It does not by itself prove that the Elastic detection fired. The next validation step is to check Elastic for the corresponding Sysmon telemetry and determine whether the detection rule generated an alert.
+
+### Verify Detection Rule Execution
+
+After executing the Atomic Red Team test, the next step was to verify whether the Elastic detection rule successfully processed the generated telemetry and produced an alert.
+
+In Kibana, I navigated to the Execution results tab of the PowerShell Encoded Command Execution rule. This section provides an execution log showing when the rule ran, whether execution succeeded, how long it took, and how many alerts were generated.
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect11.png?raw=true)
+
+**Execution Results**
+
+The execution log shows the following results:
+
+Status: Succeeded
+Run type: Scheduled
+Execution timestamp: August 8, 2026 @ 15:38:36.898
+Execution duration: 472 ms
+Alerts created: 1
+Message: Rule executed successfully
+
+The most important value is Alerts created: 1. This confirms that the detection rule not only executed successfully, but also identified an event matching its detection criteria and generated a security alert.
+
+The rule was configured to run every 5 minutes with an additional 1-minute look-back period. The subsequent execution at 15:43:36.908 also completed successfully, but created 0 alerts. This is expected when no new matching event is found during that execution window.
+
+The execution results therefore provide evidence that the detection pipeline successfully reached the alert-generation stage:
+
+Atomic Red Team Test
+        ↓
+PowerShell Execution
+        ↓
+Sysmon Event ID 1
+        ↓
+Elastic Agent
+        ↓
+Elasticsearch
+        ↓
+Detection Rule Execution
+        ↓
+Matching Event Identified
+        ↓
+1 Security Alert Created
+
+Validation result: The screenshot demonstrates a successful rule execution at **15:38:36.898** that generated 1 alert. This confirms that the configured detection rule was able to match telemetry generated during the test and create a security alert.
+
+The next step is to open the generated alert and investigate the event details to determine exactly what was detected, including the host, user, parent process, PowerShell process, command-line arguments, and other available telemetry.
