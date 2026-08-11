@@ -268,4 +268,3 @@ Elastic Detection Rule
         ↓
 Security Alert
 
-
