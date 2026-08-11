@@ -268,3 +268,22 @@ Elastic Detection Rule
         ↓
 Security Alert
 
+### Executing the Test
+
+The Atomic Red Team test was executed with:
+
+Invoke-AtomicTest T1059.001 -PathToAtomicsFolder "D:\AtomicRedTeam\atomics" -TestNumbers "17"
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect10.png?raw=true)
+
+The test output confirmed that **T1059.001-17 PowerShell Command Execution** was executed successfully and produced the expected PowerShell activity:
+
+Executing test: T1059.001-17 PowerShell Command Execution
+
+Hello, from PowerShell!
+
+Done executing test: T1059.001-17 PowerShell Command Execution
+
+This provides the controlled activity needed to test whether the Elastic detection pipeline can identify the simulated PowerShell behavior.
+
+**Important:** Successful execution of the Atomic Red Team test demonstrates that the test activity ran. It does not by itself prove that the Elastic detection fired. The next validation step is to check Elastic for the corresponding Sysmon telemetry and determine whether the detection rule generated an alert.
