@@ -329,6 +329,81 @@ Matching Event Identified
         ↓
 1 Security Alert Created
 
-Validation result: The screenshot demonstrates a successful rule execution at **15:38:36.898** that generated 1 alert. This confirms that the configured detection rule was able to match telemetry generated during the test and create a security alert.
+Validation result: In the image I confirmed a successful rule execution at **15:38:36.898** that generated 1 alert. This confirms that the configured detection rule was able to match telemetry generated during the test and create a security alert.
 
 The next step is to open the generated alert and investigate the event details to determine exactly what was detected, including the host, user, parent process, PowerShell process, command-line arguments, and other available telemetry.
+
+## Analysis
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect12.png?raw=true)
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect13.png?raw=true)
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect14.png?raw=true)
+
+After confirming that the detection rule generated an alert, the next step was to analyze the alert and determine what activity triggered the detection.
+
+The Elastic Security alert showed **one matching alert** for the **PowerShell Encoded Command Execution** rule. The alert was assigned a **Medium severity** with a **risk score of 47**.
+
+### Alert Context
+
+The alert was associated with the following endpoint and process information:
+
+| Field          | Observed Value                       |
+| -------------- | ------------------------------------ |
+| Host           | `desktop-f726tkr`                    |
+| User           | `redteam-user`                       |
+| Process        | `powershell.exe`                     |
+| Parent Process | `cmd.exe`                            |
+| Severity       | Medium                               |
+| Risk Score     | 47                                   |
+| Rule           | PowerShell Encoded Command Execution |
+
+The alert indicates that `powershell.exe` was created by `cmd.exe` under the `redteam-user` account on the Windows endpoint.
+
+### Detection Analysis
+
+The detection rule was designed to identify Windows Sysmon **Process Create (Event ID 1)** events where `powershell.exe` is executed with the `-e` argument. The `-e` parameter is an abbreviated form of PowerShell's `-EncodedCommand` parameter.
+
+In this controlled test, the PowerShell activity generated the expected endpoint telemetry, which was collected by the Elastic Agent and evaluated by the detection rule.
+
+The process relationship observed in the alert was:
+
+```text
+cmd.exe
+   ↓
+powershell.exe
+   ↓
+Encoded PowerShell command
+```
+
+This process relationship is important during investigation because the parent process provides additional context about how PowerShell was launched.
+
+### Assessment
+
+The alert provides sufficient evidence to confirm that the detection successfully identified the simulated PowerShell execution activity on the test endpoint.
+
+However, the presence of an encoded PowerShell command **does not by itself establish malicious activity**. Encoded PowerShell can also be used for legitimate administrative, automation, or testing purposes. Therefore, an analyst should investigate the command content, parent process, user context, endpoint activity, and surrounding events before determining whether the activity is malicious.
+
+### Validation Result
+
+The test successfully demonstrated the intended detection workflow:
+
+```text
+Controlled PowerShell Activity
+        ↓
+Sysmon Event ID 1
+        ↓
+Elastic Agent Collection
+        ↓
+Elasticsearch Ingestion
+        ↓
+Detection Rule Match
+        ↓
+Security Alert
+        ↓
+Analyst Investigation
+```
+
+**Conclusion:** The detection rule successfully generated a security alert from the controlled test activity, demonstrating that the detection pipeline is functioning as designed. Further investigation would be required to determine the intent and actual security impact of similar activity in a production environment.
+
