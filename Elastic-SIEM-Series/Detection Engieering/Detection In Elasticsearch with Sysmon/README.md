@@ -405,5 +405,130 @@ Security Alert
 Analyst Investigation
 ```
 
-**Conclusion:** The detection rule successfully generated a security alert from the controlled test activity, demonstrating that the detection pipeline is functioning as designed. Further investigation would be required to determine the intent and actual security impact of similar activity in a production environment.
+The detection rule successfully generated a security alert from the controlled test activity, demonstrating that the detection pipeline is functioning as designed. Further investigation would be required to determine the intent and actual security impact of similar activity in a production environment.
 
+### Alert Investigation: Process Relationship Analysis
+
+The next stage of the investigation was to examine the process relationship associated with the alert. Elastic Security's Analyzer was used to visualize the process execution chain and inspect the individual process events.
+
+I want to examine the process relationship by clicking the enter full screen icon
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect15.png?raw=true)
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect16.png?raw=true)
+
+I'm in the full screen view
+
+Now that I am in the full screen mode, click the Analyze event icon
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect17.png?raw=true)
+
+### Identify the Parent Process
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect18.png?raw=true)
+
+The Analyzer showed cmd.exe as the process associated with the PowerShell execution.
+
+The available event details showed:
+
+Process: cmd.exe
+Executable: C:\Windows\System32\cmd.exe
+PID: 16064
+User: redteam-user
+Domain: DESKTOP-F726TKR
+Process Parent PID: 6664
+
+The Analyzer did not show an associated process event for cmd.exe in this view, so the available evidence does not establish what originally launched cmd.exe.
+
+### Examine the PowerShell Process
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect19.png?raw=true)
+
+I then selected the powershell.exe process in the Analyzer to examine the event that triggered the detection.
+
+The event contained:
+
+Process: powershell.exe
+Executable: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+PID: 11780
+User: redteam-user
+Domain: DESKTOP-F726TKR
+Event timestamp: August 8, 2026 @ 15:34:49.399
+Process parent: cmd.exe
+
+This establishes the observed process relationship:
+
+cmd.exe
+   │
+   └── powershell.exe
+
+  ### Why the Process Relationship Matters
+
+Examining the parent-child relationship provides important context during alert investigation. Rather than analyzing powershell.exe in isolation, the analyst can determine how PowerShell was launched and correlate that activity with the surrounding process events.
+
+In this case, the telemetry shows that powershell.exe was launched by cmd.exe under the redteam-user account on the Windows endpoint.
+
+The process relationship is therefore consistent with the controlled test activity performed during validation.
+
+### Investigation Assessment
+
+The Analyzer confirms the presence of the expected cmd.exe → powershell.exe process chain associated with the alert. Combined with the earlier evidence showing that the detection generated one alert from the controlled Atomic Red Team test, this provides supporting evidence that the rule successfully detected the simulated PowerShell activity.
+
+### Alert Investigation: Alert Details and Command-Line Analysis
+
+The next stage of the investigation was to open the alert details and examine the fields that directly contributed to the detection.
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect20.png?raw=true)
+
+By selecting View details, the alert provided additional context about the event, including the host, user, executable, parent process, and PowerShell command-line arguments.
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect22.png?raw=true)
+
+### Alert Details
+
+The alert was classified as:
+
+Rule: PowerShell Encoded Command Execution
+Severity: Medium
+Risk Score: 47
+Host: desktop-f726tkr
+User: redteam-user
+Process: powershell.exe
+Parent Process: cmd.exe
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/Elastic-SIEM-Series/Detection%20Engieering/Detection%20In%20Elasticsearch%20with%20Sysmon/detect22.png?raw=true)
+The alert reason states that a process event involving powershell.exe, launched by cmd.exe under the redteam-user account, matched the detection rule.
+
+### Command-Line Analysis
+
+The most significant field in the alert is process.args. The telemetry shows:
+
+powershell.exe
+-e
+<encoded command>
+
+The -e argument is the abbreviated PowerShell parameter for -EncodedCommand. This is the specific behavior the detection rule was designed to identify.
+
+The presence of the encoded argument explains why the event matched the rule:
+
+process.name: powershell.exe
+        +
+process.args: -e
+        ↓
+Detection Rule Match
+        ↓
+Security Alert
+
+The encoded payload itself is visible in the telemetry as a Base64-encoded string rather than the original PowerShell command. This demonstrates why command-line inspection is important when investigating PowerShell activity: the presence of an encoding parameter can obscure the underlying command from a simple visual review.
+
+### Investigation Assessment
+
+At this point, the investigation has established the following evidence:
+
+powershell.exe was executed on desktop-f726tkr.
+The process was associated with the redteam-user account.
+cmd.exe was identified as the parent process.
+The PowerShell process included the -e encoded-command argument.
+The event matched the custom Elastic detection rule.
+Elastic generated a Medium-severity alert with a risk score of 47.
+
+Because this activity was intentionally generated as part of the controlled Atomic Red Team validation, the alert is expected test activity rather than evidence of an actual compromise.
