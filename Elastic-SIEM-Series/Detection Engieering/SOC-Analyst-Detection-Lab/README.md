@@ -115,6 +115,18 @@ This produced a failed SMB authentication attempt against the Windows endpoint.
 
 Note: This was a controlled lab activity against a Windows VM created specifically for security monitoring and detection practice.
 
+## Windows Security Event
+
+Elastic ingested the resulting Windows Security event through the Elastic Agent.
+
+## Event ID
+4625
+
+## Event Type
+
+Failed Logon
+
+
 
 | Field                  | Observed Value                       |
 | ---------------------- | ------------------------------------ |
@@ -134,3 +146,28 @@ Note: This was a controlled lab activity against a Windows VM created specifical
 | Status                 | `0xc000006d`                         |
 | SubStatus              | `0xc000006a`                         |
 | Source Port            | `35276`                              |
+
+
+## Elastic Event Evidence
+
+The event was observed in the system.security data stream.
+
+Relevant fields included:
+
+agent.name = Windows11-lab
+data_stream.dataset = system.security
+event.code = 4625
+event.action = logon-failed
+event.category = authentication
+event.outcome = failure
+
+user.name = socuser
+source.ip = 192.168.56.102
+source.domain = KALI
+source.port = 35276
+
+winlog.logon.type = Network
+winlog.event_data.AuthenticationPackageName = NTLM
+winlog.event_data.TargetUserName = socuser
+winlog.event_data.TargetDomainName = WORKGROUP
+winlog.event_data.FailureReason = Unknown user name or bad password.
