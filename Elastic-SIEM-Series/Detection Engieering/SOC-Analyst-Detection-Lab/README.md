@@ -1,0 +1,54 @@
+# SOC Analyst Detection Lab
+
+### Project Objective
+
+The goal of this project is to build a practical SOC environment where I can work through security alerts the way a Tier 1 SOC analyst would in a real environment.
+
+Rather than only learning how individual security events work, I want to understand the full investigation process: what happened, which system and user were involved, whether the activity is expected or suspicious, what evidence supports the conclusion, and what should happen next.
+
+The lab uses Elastic Security, Windows Event Logs, Sysmon, and controlled security activity to collect and investigate endpoint telemetry. I will use these events to practice alert triage, threat identification, MITRE ATT&CK and Cyber Kill Chain analysis, detection development, validation, and writing clear investigation reports.
+
+The project will grow through individual investigation exercises, starting with Windows authentication events and eventually moving into process execution, PowerShell, network activity, suspicious behavior, detection rules, and complete SOC investigations.
+
+The objective is not simply to generate alerts. It is to develop the ability to investigate them, understand the evidence, make a defensible assessment, and document the investigation clearly.
+
+
+# SOC Analyst Detection Lab
+
+## Project Objective
+
+## Lab Environment
+
+## Architecture
+
+## Objectives
+
+## Exercises
+
+### 01. Windows Authentication Investigation
+
+### 02. Windows Process Investigation
+
+### 03. PowerShell Investigation
+
+### 04. Network Activity Investigation
+
+### 05. Alert Triage
+
+### 06. MITRE ATT&CK Analysis
+
+### 07. Cyber Kill Chain Analysis
+
+### 08. Detection Development
+
+### 09. Detection Validation
+
+### 10. SOC Investigation Reports
+
+## Detection Methodology
+
+## MITRE ATT&CK Mapping
+
+## Lessons Learned
+
+## Conclusion
