@@ -107,22 +107,3 @@ The purpose was to generate a Windows failed-logon event that could then be inve
 
 The authentication attempt was generated from Kali using:
 
-```bash
-smbclient -L //192.168.56.101 -U 'socuser'
-
-An incorrect password was intentionally entered.
-
-This produced a failed SMB authentication attempt against the Windows endpoint.
-
-Note: This was a controlled lab activity against a Windows VM created specifically for security monitoring and detection practice.
-
-
-
-Windows Security Event
-
-Elastic ingested the resulting Windows Security event through the Elastic Agent.
-
-Event ID
-4625
-Event Type
-Failed Logon
