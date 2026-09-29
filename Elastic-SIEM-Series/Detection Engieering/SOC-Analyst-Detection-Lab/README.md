@@ -109,3 +109,5 @@ The authentication attempt was generated from Kali using:
 
 ```bash
 smbclient -L //192.168.56.101 -U 'socuser'
+
+
