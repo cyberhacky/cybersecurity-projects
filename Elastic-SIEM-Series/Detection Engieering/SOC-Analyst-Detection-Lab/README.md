@@ -114,3 +114,31 @@ An incorrect password was intentionally entered.
 This produced a failed SMB authentication attempt against the Windows endpoint.
 
 Note: This was a controlled lab activity against a Windows VM created specifically for security monitoring and detection practice.
+
+
+Windows Security Event
+
+Elastic ingested the resulting Windows Security event through the Elastic Agent.
+
+Event ID
+4625
+Event Type
+Failed Logon
+Key Event Fields
+Field	Observed Value
+Event ID	4625
+Event Action	logon-failed
+Event Category	authentication
+Event Outcome	failure
+Target User	socuser
+Target Domain	WORKGROUP
+Source IP	192.168.56.102
+Source Host	KALI
+Target Host	Windows11-lab
+Logon Type	3 - Network
+Authentication Package	NTLM
+Logon Process	NtLmSsp
+Failure Reason	Unknown user name or bad password.
+Status	0xc000006d
+SubStatus	0xc000006a
+Source Port	35276
