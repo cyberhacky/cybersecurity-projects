@@ -171,3 +171,16 @@ winlog.event_data.AuthenticationPackageName = NTLM
 winlog.event_data.TargetUserName = socuser
 winlog.event_data.TargetDomainName = WORKGROUP
 winlog.event_data.FailureReason = Unknown user name or bad password.
+
+
+## Windows Security Event 4624
+**Report Type:** Authentication Event Analysis
+**Severity:** Informational / Low
+**Classification:** Benign / Expected System Activity
+**Event ID:** 4624 - Successful Logon
+**Data Source:** Windows Security Event Log
+**SIEM:** Elastic Security
+**Host:** Windows11-lab
+
+
+
