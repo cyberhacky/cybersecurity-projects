@@ -238,7 +238,7 @@ For investigation purposes, the report therefore records the timestamps exactly 
 ## Subject Account
 The event identifies the account requesting the logon as:
 
-Account Name:   WINDOWS11-LAB$
-Account Domain: WORKGROUP
-Security ID:    S-1-5-18
-Logon ID:       0x3e7
+Account Name:   'WINDOWS11-LAB$'
+Account Domain: 'WORKGROUP'
+Security ID:    'S-1-5-18'
+Logon ID:       '0x3e7'
