@@ -226,9 +226,19 @@ Based on the available telemetry, the activity is assessed as benign and consist
 
 
 ## Timeline
-The record contains the following timestamps:
+The log record contains the following timestamps:
 | Timestamp | Field | Value |
 |---|---|---|
 | `2026-10-06 18:59:12.789Z` | `@timestamp` | Event document timestamp |
 | `2026-10-06 16:11:09.249Z` | `event.created` | Event creation time |
 | `2026-10-06 16:11:17.000Z` | `event.ingested` | Elastic ingestion time |
+
+For investigation purposes, the report therefore records the timestamps exactly as provided by Elastic.
+
+## Subject Account
+The event identifies the account requesting the logon as:
+
+Account Name:   WINDOWS11-LAB$
+Account Domain: WORKGROUP
+Security ID:    S-1-5-18
+Logon ID:       0x3e7
