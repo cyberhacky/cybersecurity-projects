@@ -190,4 +190,37 @@ winlog.event_data.FailureReason = Unknown user name or bad password.
 **Host:** Windows11-lab
 
 
+## Executive Summary
+A Windows Security Event ID **4624** was observed on the Windows11-lab endpoint indicating that the **SYSTEM** account successfully established a logon session.
+The event records a **Service logon (Logon Type 5)** initiated by the Windows services.exe process. The authentication used the **Negotiate** authentication package, and the resulting session received an elevated token.
+No source network address, workstation name, or source port was recorded for this event.
+Based on the available telemetry, the activity is assessed as benign and consistent with normal Windows service activity. The combination of SYSTEM, Logon Type 5, services.exe, and the absence of a remote source is not, by itself, indicative of malicious activity.
+
+## Event Details
+| Field | Observed Value |
+|---|---|
+| Event ID | `4624` |
+| Event Action | `logged-in` |
+| Event Category | `authentication` |
+| Event Outcome | `success` |
+| Event Type | `start` |
+| Provider | `Microsoft-Windows-Security-Auditing` |
+| Channel | `Security` |
+| Host | `Windows11-lab` |
+| Host IP | `192.168.56.101` |
+| User | `SYSTEM` |
+| User Domain | `NT AUTHORITY` |
+| User SID | `S-1-5-18` |
+| Logon Type | `5 - Service` |
+| Logon ID | `0x3e7` |
+| Authentication Package | `Negotiate` |
+| Logon Process | `Advapi` |
+| Elevated Token | `Yes` |
+| Virtual Account | `No` |
+| Impersonation Level | `Impersonation` |
+| Process | `C:\Windows\System32\services.exe` |
+| Process ID | `836` |
+| Source IP | Not present |
+| Source Port | Not present |
+| Workstation | Not present |
 
