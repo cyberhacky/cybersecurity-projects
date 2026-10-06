@@ -53,7 +53,7 @@ The objective is not simply to generate alerts. It is to develop the ability to 
 
 ### Conclusion
 
-## Exercise 01 — Windows Authentication Investigation
+## Exercise 01 - Windows Authentication Investigation
 
 ## Phase 3: Failed Authentication
 
