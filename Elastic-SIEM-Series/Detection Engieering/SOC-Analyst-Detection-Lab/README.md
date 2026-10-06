@@ -13,17 +13,17 @@ The project will grow through individual investigation exercises, starting with 
 The objective is not simply to generate alerts. It is to develop the ability to investigate them, understand the evidence, make a defensible assessment, and document the investigation clearly.
 
 
-# SOC Analyst Detection Lab
+## SOC Detection Lab
 
-## Project Objective
+### Project Objective
 
-## Lab Environment
+### Lab Environment
 
-## Architecture
+### Architecture
 
-## Objectives
+### Objectives
 
-## Exercises
+### Exercises
 
 ### 01. Windows Authentication Investigation
 
@@ -47,13 +47,13 @@ The objective is not simply to generate alerts. It is to develop the ability to 
 
 ## Detection Methodology
 
-## MITRE ATT&CK Mapping
+### MITRE ATT&CK Mapping
 
-## Lessons Learned
+### Lessons Learned
 
-## Conclusion
+### Conclusion
 
-# Exercise 01 — Windows Authentication Investigation
+## Exercise 01 — Windows Authentication Investigation
 
 ## Phase 3: Failed Authentication
 
