@@ -224,3 +224,11 @@ Based on the available telemetry, the activity is assessed as benign and consist
 | Source Port | Not present |
 | Workstation | Not present |
 
+
+## Timeline
+The record contains the following timestamps:
+| Timestamp | Field | Value |
+|---|---|---|
+| `2026-10-06 18:59:12.789Z` | `@timestamp` | Event document timestamp |
+| `2026-10-06 16:11:09.249Z` | `event.created` | Event creation time |
+| `2026-10-06 16:11:17.000Z` | `event.ingested` | Elastic ingestion time |
