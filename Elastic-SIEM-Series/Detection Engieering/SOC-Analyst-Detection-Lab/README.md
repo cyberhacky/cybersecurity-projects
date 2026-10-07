@@ -245,3 +245,20 @@ Account Domain: WORKGROUP
 Security ID:    S-1-5-18
 
 Logon ID:       0x3e7
+
+
+The new logon session was created for:
+
+Account Name:         SYSTEM
+
+Account Domain:      NT AUTHORITY
+
+Security ID:         S-1-5-18
+
+Logon ID:            0x3e7
+
+
+The important distinction is that this is not a remote socuser authentication.
+This event represents the Windows SYSTEM account establishing a service logon session.
+
+
