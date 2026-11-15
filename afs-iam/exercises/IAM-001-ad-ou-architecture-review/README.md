@@ -62,16 +62,46 @@ Incorrect OU organization can complicate administration, policy application and 
 
 ## 6. Initial Environment State
 
-To be recorded immediately before execution.
+### Step 1 — Domain Controller Verification
 
-Record:
-- Domain controller availability.
-- Domain connectivity.
-- Current OU hierarchy.
-- Existing directory objects.
-- Any deviations from the approved design.
+**Execution date:** 15 November 2026
 
-No configuration changes are authorized during this exercise.
+**System:** AD-DC01
+
+**Commands executed:**
+
+```powershell
+hostname
+
+Get-ADDomain | Select-Object DNSRoot, NetBIOSName, DomainMode
+
+Get-Service NTDS, DNS
+```
+
+### Actual Results
+
+| Attribute | Observed Result |
+|---|---|
+| Hostname | AD-DC01 |
+| DNSRoot | corp.lab |
+| NetBIOSName | CORP |
+| DomainMode | Windows2016Domain |
+| NTDS service | Running |
+| DNS service | Running |
+
+### Analysis
+
+The hostname and domain information match the established AFS environment.
+
+Both Active Directory Domain Services (NTDS) and DNS services were observed in the Running state.
+
+### Verification Status
+
+**PASSED**
+
+The domain controller and required services were verified as operational at the time of execution.
+
+**Limitation:** This check does not independently validate DNS resolution, domain controller discovery, replication health or workstation connectivity.
 
 ## 7. Step-by-Step Methodology
 
