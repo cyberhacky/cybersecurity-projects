@@ -171,9 +171,73 @@ These are expected outcomes, not confirmed findings.
 
 ## 9. Actual Results and Evidence
 
-**Pending execution.**
+### Step 2 — Active Directory OU Hierarchy Inventory
 
-Evidence will be added after the commands have been executed and their output reviewed.
+**Execution date:** 15 November 2026
+
+**System:** AD-DC01
+
+**Command executed:**
+
+```powershell
+Get-ADOrganizationalUnit `
+  -SearchBase "OU=ApexFinancialServices,DC=corp,DC=lab" `
+  -SearchScope Subtree `
+  -Filter * |
+Sort-Object DistinguishedName |
+Select-Object Name, DistinguishedName |
+Format-Table -AutoSize
+```
+
+### Actual Results
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active1.png?raw=true)
+
+- Total OU objects returned: 22.
+- AFS root OU: 1.
+- Descendant OUs: 21.
+- Security sub-departments: 4.
+- Infrastructure child OUs: 3.
+- Groups child OUs: 3.
+
+### Verified Architecture Deviation
+
+The approved blueprint specifies a `Departments` parent OU containing all departmental OUs.
+
+The actual environment currently places the department OUs directly beneath `ApexFinancialServices`.
+
+The following structure was observed:
+
+```text
+ApexFinancialServices
+├── Executive
+├── Finance
+├── Human Resources
+├── IT
+├── Legal and Compliance
+├── Operations
+└── Security
+    ├── IAM
+    ├── Penetration Testing
+    ├── SOC
+    └── Vulnerability Management
+```
+
+### Analysis
+
+The required departmental and supporting OU structures are present. However, the missing `Departments` parent OU represents a deviation from the approved architecture.
+
+This is not evidence of a security vulnerability. Its potential administrative and Group Policy implications require further assessment.
+
+### Verification Status
+
+**PASSED — OU inventory retrieved successfully.**
+
+**Finding:** Organizational structure differs from the approved blueprint.
+
+**Configuration changes:** None.
+
+**Remediation decision:** Deferred pending architecture review.
 
 ## 10. Verification
 
