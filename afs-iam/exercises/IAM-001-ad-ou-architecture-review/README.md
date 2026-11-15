@@ -1,71 +1,90 @@
-# IAM-001 — Active Directory OU Architecture Review
+# IAM-001 — Assessing and Managing Enterprise Active Directory Organizational Structure
 
-## 1. Exercise Information
+## 1. Exercise Overview
 
 | Attribute | Details |
 |---|---|
 | Exercise ID | IAM-001 |
 | Category | Identity and Access Management |
-| Workstream | Active Directory Administration |
-| Organization | Apex Financial Services |
+| Role Simulated | IAM Analyst |
+| Organization | Apex Financial Services (AFS) |
 | Domain | `corp.lab` |
 | Domain Controller | AD-DC01 |
-| Assessment Type | Read-only configuration review |
-| Status | Planned |
-| Authorization | Authorized AFS isolated lab |
+| Platform | Windows Server 2022 / Active Directory |
+| Tools | PowerShell, Active Directory PowerShell Module |
+| Assessment Type | Read-only directory assessment |
+| Status | In Progress |
+| Authorization | Authorized isolated training environment |
 
-## 2. Objective
+## 2. Business Objective
 
-Review the existing Active Directory Organizational Unit (OU) structure and compare it against the approved AFS Enterprise Cybersecurity Lab Master Blueprint.
+Assess the existing enterprise Active Directory organizational structure to determine whether employee identities, security teams, infrastructure and supporting directory objects are organized according to the approved organizational design.
 
-Identify structural inconsistencies, misplaced objects and opportunities for improvement without modifying the directory.
+The assessment simulates an IAM Analyst responsibility involving directory administration, identity governance, organizational structure reviews and the identification of configuration discrepancies.
 
-## 3. Purpose and Security Relevance
+## 3. Business Scenario
 
-A well-designed OU structure supports:
+Apex Financial Services requires its Active Directory environment to reflect its organizational structure and support centralized identity administration.
 
-- Centralized identity administration.
-- Logical departmental organization.
-- Group Policy targeting.
-- Delegated administration.
-- Access management.
-- Consistent enterprise directory governance.
+As part of an IAM directory review, the analyst is tasked with:
 
-Incorrect OU organization can complicate administration, policy application and access management.
+- Reviewing the existing departmental OU hierarchy.
+- Identifying where organizational identities are stored.
+- Reviewing supporting infrastructure and security group structures.
+- Comparing the implemented directory against the approved organizational design.
+- Documenting discrepancies and recommending appropriate corrective action.
 
-## 4. Scope
+The assessment must be completed without making unauthorized directory changes.
 
-**In scope:**
+## 4. Scope and Authorization
+
+### In Scope
+
 - AFS organizational root OU.
-- Department OUs.
-- Security sub-department OUs.
+- Departmental organizational units.
+- Security subdepartment OUs.
 - Infrastructure OUs.
-- Groups OUs.
+- Security group organizational units.
 - Service Accounts OU.
 - Disabled Accounts OU.
-- Existing object locations.
+- Directory object placement.
 
-**Out of scope:**
-- Creating or deleting OUs.
-- Moving users or computers.
-- Changing group memberships.
-- Modifying Group Policy.
-- Changing permissions or ACLs.
+### Out of Scope
 
-## 5. Prerequisites
+- Creating or deleting directory objects.
+- Moving or renaming users and groups.
+- Modifying group memberships.
+- Changing Group Policy.
+- Modifying permissions or ACLs.
+- Changing authentication configurations.
 
-- Administrative PowerShell access to AD-DC01.
-- Active Directory PowerShell module.
+All activities are restricted to the authorized AFS VirtualBox lab.
+
+## 5. Tools and Prerequisites
+
+| Tool | Purpose |
+|---|---|
+| Windows PowerShell | Directory administration and assessment |
+| Active Directory PowerShell Module | Querying AD objects |
+| Active Directory Domain Services | Centralized directory infrastructure |
+| ADUC | Graphical directory inspection |
+
+Prerequisites:
+
+- Administrative access to AD-DC01.
 - Operational `corp.lab` domain.
-- Approved AFS Master Blueprint v1.1.
-- Appropriate VM snapshot or backup before any later modification.
+- Active Directory PowerShell module.
+- Approved AFS Master Project Blueprint v1.1.
 
-## 6. Initial Environment State
+## 6. Initial Environment Verification
 
-### Step 1 — Domain Controller Verification
+### Step 1 — Confirming the Active Directory Environment
 
+**Business purpose:** Establish that the directory infrastructure is available before performing an administrative assessment.
 
 **System:** AD-DC01
+
+**Commands executed:**
 
 ```powershell
 hostname
@@ -77,103 +96,32 @@ Get-Service NTDS, DNS
 
 ### Actual Results
 
-![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active.png?raw=true)
-
-| Attribute | Observed Result |
+| Check | Observed Result |
 |---|---|
 | Hostname | AD-DC01 |
-| DNSRoot | corp.lab |
-| NetBIOSName | CORP |
-| DomainMode | Windows2016Domain |
+| DNS domain | corp.lab |
+| NetBIOS name | CORP |
+| Domain mode | Windows2016Domain |
 | NTDS service | Running |
 | DNS service | Running |
 
 ### Analysis
 
-The hostname and domain information match the established AFS environment.
+The domain controller hostname and domain details matched the established AFS lab configuration.
 
-Both Active Directory Domain Services (NTDS) and DNS services were observed in the Running state.
+Both Active Directory Domain Services and DNS were observed in the Running state.
 
-### Verification Status
+**Verification:** PASSED.
 
-**PASSED**
+**Evidence:** PowerShell command output captured during execution.
 
-The domain controller and required services were verified as operational at the time of execution.
+**Limitation:** This check does not independently validate DNS resolution, replication health or workstation connectivity.
 
-**Limitation:** This check does not independently validate DNS resolution, domain controller discovery, replication health or workstation connectivity.
+## 7. Enterprise Directory Structure Assessment
 
-## 7. Step-by-Step Methodology
+### Step 2 — Reviewing the Company's Organizational Structure
 
-### Step 1 — Import the Active Directory module
-
-```powershell
-Import-Module ActiveDirectory
-```
-
-### Step 2 — Retrieve the existing OU hierarchy
-
-```powershell
-Get-ADOrganizationalUnit `
-  -SearchBase "OU=ApexFinancialServices,DC=corp,DC=lab" `
-  -SearchScope Subtree `
-  -Filter * |
-Sort-Object DistinguishedName |
-Select-Object Name, DistinguishedName |
-Format-Table -AutoSize
-```
-
-### Step 3 — Inventory existing security groups
-
-```powershell
-Get-ADGroup `
-  -SearchBase "OU=Groups,OU=ApexFinancialServices,DC=corp,DC=lab" `
-  -SearchScope Subtree `
-  -Filter * |
-Sort-Object Name |
-Select-Object Name, GroupScope, GroupCategory |
-Format-Table -AutoSize
-```
-
-### Step 4 — Review object placement
-
-Review the location of:
-- Employee accounts.
-- Computer accounts.
-- Security groups.
-- Service accounts.
-- Administrative accounts.
-
-### Step 5 — Compare against the approved architecture
-
-Compare the actual directory structure against the AFS Master Blueprint v1.1.
-
-Record:
-- Matching structures.
-- Missing OUs.
-- Unexpected OUs.
-- Structural deviations.
-- Objects requiring further review.
-
-### Step 6 — Document findings
-
-Record all verified observations and supporting evidence.
-
-Do not make directory changes under this exercise.
-
-## 8. Expected Results
-
-- A complete inventory of the AFS OU hierarchy.
-- A list of existing security groups.
-- Identification of structural differences.
-- A documented recommendation for the next IAM activity.
-
-These are expected outcomes, not confirmed findings.
-
-## 9. Actual Results and Evidence
-
-### Step 2 — Active Directory OU Hierarchy Inventory
-
-**Execution date:** 15 November 2026
+**Business purpose:** Identify how the organization is represented within Active Directory and determine whether the directory hierarchy reflects the approved enterprise design.
 
 **System:** AD-DC01
 
@@ -191,79 +139,199 @@ Format-Table -AutoSize
 
 ### Actual Results
 
-![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active1.png?raw=true)
+The command successfully returned 22 OU objects:
 
-- Total OU objects returned: 22.
-- AFS root OU: 1.
-- Descendant OUs: 21.
-- Security sub-departments: 4.
-- Infrastructure child OUs: 3.
-- Groups child OUs: 3.
+- 1 AFS root OU.
+- 21 descendant OUs.
+- 4 Security subdepartment OUs.
+- 3 Infrastructure child OUs.
+- 3 Groups child OUs.
 
-### Verified Architecture Deviation
-
-The approved blueprint specifies a `Departments` parent OU containing all departmental OUs.
-
-The actual environment currently places the department OUs directly beneath `ApexFinancialServices`.
-
-The following structure was observed:
+### Observed Organizational Structure
 
 ```text
 ApexFinancialServices
+│
 ├── Executive
 ├── Finance
 ├── Human Resources
 ├── IT
 ├── Legal and Compliance
 ├── Operations
-└── Security
-    ├── IAM
-    ├── Penetration Testing
-    ├── SOC
-    └── Vulnerability Management
+│
+├── Security
+│   ├── IAM
+│   ├── Penetration Testing
+│   ├── SOC
+│   └── Vulnerability Management
+│
+├── Infrastructure
+│   ├── Member Servers
+│   ├── Test Systems
+│   └── Workstations
+│
+├── Groups
+│   ├── Department Groups
+│   ├── Privileged Groups
+│   └── Role Groups
+│
+├── Service Accounts
+└── Disabled Accounts
 ```
+
+### Architecture Finding
+
+**Finding:** The implemented OU hierarchy differs from the approved AFS blueprint.
+
+The blueprint specifies a `Departments` parent OU containing all departmental OUs. In the actual environment, the departmental OUs are located directly beneath `ApexFinancialServices`.
+
+The Security subdepartment OUs are correctly nested beneath Security.
 
 ### Analysis
 
-The required departmental and supporting OU structures are present. However, the missing `Departments` parent OU represents a deviation from the approved architecture.
+The difference represents an organizational design deviation. It is not, by itself, evidence of a security vulnerability.
 
-This is not evidence of a security vulnerability. Its potential administrative and Group Policy implications require further assessment.
+Potential implications include:
 
-### Verification Status
+- Differences in Group Policy inheritance and targeting.
+- Organizational administration and delegation design.
+- Consistency between documented and implemented directory architecture.
 
-**PASSED — OU inventory retrieved successfully.**
+Further assessment is required before deciding whether restructuring is necessary.
 
-**Finding:** Organizational structure differs from the approved blueprint.
+**Verification:** PASSED — OU inventory retrieved successfully.
 
 **Configuration changes:** None.
 
 **Remediation decision:** Deferred pending architecture review.
 
-## 10. Verification
+**Evidence:** Actual PowerShell output and GitHub exercise record.
 
-Verification will establish that:
-- The OU inventory completed successfully.
-- The expected directory scope was queried.
-- Group inventory was retrieved.
-- Findings are supported by actual output.
-- No directory configuration was modified.
+## 8. Reviewing Enterprise Security Groups
 
-## 11. Security Analysis
+### Step 3 — Reviewing Departmental, Role-Based and Privileged Groups
 
-The review will evaluate whether the OU design supports centralized administration, appropriate Group Policy scope, separation of departments and least-privilege administration.
+**Business purpose:** Establish how enterprise security groups are organized and identify the groups used to support role-based access management.
 
-## 12. Limitations
+**Status:** Pending execution.
 
-This exercise is an OU architecture review. It does not establish effective user permissions, prove Group Policy application or validate all delegated administrative rights.
+Planned assessment:
 
-## 13. Cleanup and Rollback
+- Retrieve security groups within the Groups OU.
+- Identify group scope and category.
+- Review group naming conventions.
+- Identify the proposed Vulnerability Engineer group if it already exists.
+- Record groups requiring further membership review.
 
-No cleanup or rollback is required because the exercise is read-only.
+**Expected evidence:** Group inventory and analysis.
 
-## 14. Conclusion
+No group modifications are authorized during this step.
 
-**Status:** Planned.
+## 9. Reviewing Employee and Computer Account Placement
 
+### Step 4 — Examining Identity and Infrastructure Object Locations
+
+**Business purpose:** Determine whether employee identities and computer accounts are stored in their intended organizational locations.
+
+Planned assessment:
+
+- Review employee account locations.
+- Review department attributes.
+- Review computer account locations.
+- Identify unexpected or inconsistent object placement.
+
+**Status:** Pending execution.
+
+## 10. Comparing the Directory Against the Approved Architecture
+
+### Step 5 — Assessing Organizational Design Compliance
+
+Compare the actual directory hierarchy and object placement against AFS Master Project Blueprint v1.1.
+
+Review:
+
+- Departmental organization.
+- Security subdepartment organization.
+- Infrastructure organization.
+- Group storage locations.
+- Service account separation.
+- Disabled account organization.
+
+**Status:** In Progress.
+
+**Known deviation:** Missing `Departments` parent OU.
+
+## 11. Documenting Findings and Administrative Recommendations
+
+### Step 6 — Preparing the IAM Assessment Record
+
+Document:
+
+- Verified directory structures.
+- Observed deviations.
+- Supporting evidence.
+- Administrative implications.
+- Recommended corrective actions.
+- Outstanding questions and limitations.
+
+No remediation will be performed without an approved change decision.
+
+**Status:** Pending completion of the assessment.
+
+## 12. Security and Governance Analysis
+
+This exercise demonstrates how an IAM Analyst can use Active Directory PowerShell to inspect directory organization and support identity governance.
+
+A structured directory hierarchy contributes to:
+
+- Centralized identity administration.
+- Organizational consistency.
+- Group Policy administration.
+- Delegated administration planning.
+- Identity lifecycle management.
+
+The inventory alone does not prove effective permissions, successful policy application or the absence of excessive privileges.
+
+## 13. Limitations
+
+- Assessment is restricted to the AFS training domain.
+- Directory structure does not independently establish effective user permissions.
+- No production enterprise deployment is represented.
+- Group Policy application and delegated administrative rights require separate testing.
+- Findings are limited to the evidence collected.
+
+## 14. Cleanup and Rollback
+
+No cleanup or rollback is required.
+
+All completed assessment steps were read-only. No Active Directory configuration changes were made.
+
+## 15. Conclusion and Exercise Status
+
+**Current status: IN PROGRESS**
+
+Completed:
+
+- Verified domain controller identity and domain information.
+- Confirmed NTDS and DNS service states.
+- Retrieved the existing OU hierarchy.
+- Identified a discrepancy between the implemented directory and approved architecture.
+
+Pending:
+
+- Security group inventory.
+- Employee and computer account placement review.
+- Completion of architecture assessment.
+- Final recommendations and verification.
+
+This exercise will be marked completed after all planned assessment activities, evidence collection and final documentation have been reviewed.
+
+## 16. References
+
+- AFS Enterprise Cybersecurity Lab Master Project Blueprint v1.1.
+- Microsoft Active Directory Domain Services documentation.
+- Microsoft Active Directory PowerShell module documentation.
+- Microsoft Group Policy documentation.
 The exercise will be marked completed only after execution, evidence collection, verification and documentation.
 
 ## 15. References
