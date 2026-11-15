@@ -96,6 +96,8 @@ Get-Service NTDS, DNS
 
 ### Actual Results
 
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active.png?raw=true)
+
 | Check | Observed Result |
 |---|---|
 | Hostname | AD-DC01 |
@@ -138,6 +140,8 @@ Format-Table -AutoSize
 ```
 
 ### Actual Results
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active1.png?raw=true)
 
 The command successfully returned 22 OU objects:
 
