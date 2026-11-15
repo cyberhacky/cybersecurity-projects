@@ -397,6 +397,86 @@ An enabled account should not automatically be treated as an authorized or curre
 
 **Remediation:** Deferred pending additional verification.
 
+### Step 4B — Reviewing Enterprise Computer Accounts and Workstation Placement
+
+**Business purpose:** Review computer identities registered in Active Directory to establish whether organizational endpoints are represented and stored in their intended infrastructure locations.
+
+**Execution date:** 15 November 2026
+
+**System:** AD-DC01
+
+**Tool:** Active Directory PowerShell Module
+
+#### Command Executed
+
+```powershell
+Get-ADComputer -SearchBase "OU=Infrastructure,OU=ApexFinancialServices,DC=corp,DC=lab" -SearchScope Subtree -Filter * -Properties OperatingSystem,OperatingSystemVersion,Enabled | Sort-Object Name | Select-Object Name,OperatingSystem,OperatingSystemVersion,Enabled,DistinguishedName | Format-List
+```
+
+#### Actual Results
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active7.png?raw=true)
+
+The command successfully returned one computer account within the specified Infrastructure OU search scope.
+
+| Attribute | Observed result |
+|---|---|
+| Computer account | CLIENT01 |
+| Operating system | Windows 11 Pro |
+| Operating system version | 10.0 (26200) |
+| Account enabled | True |
+| Organizational location | Infrastructure / Workstations |
+
+#### Findings
+
+**Finding 1 — Computer account registration**
+
+CLIENT01 exists in Active Directory under the Infrastructure/Workstations OU.
+
+**Finding 2 — Operating system identification**
+
+Active Directory reports Windows 11 Pro, version 10.0 (26200).
+
+These directory attributes provide inventory information but do not independently establish patch compliance or current endpoint health.
+
+**Finding 3 — Computer account status**
+
+The CLIENT01 computer account is enabled. This does not independently establish that the endpoint is online or that its domain secure channel is healthy.
+
+**Finding 4 — Search scope limitation**
+
+The query was restricted to the AFS Infrastructure OU and its descendants.
+
+AD-DC01 resides in the separate Domain Controllers OU and was therefore outside the assessment scope.
+
+The returned record must not be interpreted as a complete inventory of all domain computers.
+
+#### Security and Governance Analysis
+
+Computer accounts are identities within Active Directory and require appropriate organizational management.
+
+Accurate computer account placement supports directory administration, Group Policy targeting and endpoint identity governance.
+
+Further investigation would be required to establish asset ownership, last logon activity, endpoint health and whether registered computer accounts remain required.
+
+#### Verification
+
+**PASSED** — Computer account inventory retrieved successfully.
+
+- One computer account returned within the specified scope.
+- CLIENT01 identified.
+- Operating system attributes retrieved.
+- Account enabled status confirmed.
+- Workstations OU placement confirmed.
+
+**Configuration changes:** None.
+
+**Remediation:** No changes recommended based solely on this inventory.
+
+#### Evidence
+
+Attach the actual PowerShell output screenshot to this section.
+
 
 ## 10. Comparing the Directory Against the Approved Architecture
 
