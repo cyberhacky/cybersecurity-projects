@@ -303,18 +303,100 @@ The presence of a group under a Privileged Groups OU does not, by itself, prove 
 
 ## 9. Reviewing Employee and Computer Account Placement
 
-### Step 4 — Examining Identity and Infrastructure Object Locations
+### Step 4A — Reviewing Employee Identity Records and Department Assignments
 
-**Business purpose:** Determine whether employee identities and computer accounts are stored in their intended organizational locations.
+**Business purpose:** Conduct an employee identity inventory to assess whether Active Directory records contain appropriate organizational attributes and are stored in their intended departmental locations.
 
-Planned assessment:
+**Execution date:** 15 November 2026
 
-- Review employee account locations.
-- Review department attributes.
-- Review computer account locations.
-- Identify unexpected or inconsistent object placement.
+**System:** AD-DC01
 
-**Status:** Pending execution.
+**Tool:** Active Directory PowerShell Module
+
+#### Command Executed
+
+```powershell
+Get-ADUser -SearchBase "OU=ApexFinancialServices,DC=corp,DC=lab" -SearchScope Subtree -Filter * -Properties Department,Title,Enabled | Sort-Object Name | Select-Object Name,SamAccountName,Department,Title,Enabled,DistinguishedName | Format-List
+```
+
+#### Actual Results
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active4.png?raw=true)
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active5.png?raw=true)
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active6.png?raw=true)
+
+The command successfully returned 12 employee account records.
+
+| Attribute | Observed result |
+|---|---|
+| Total accounts retrieved | 12 |
+| Enabled accounts | 12 |
+| Disabled accounts | 0 |
+| Departments represented | 7 |
+
+#### Department Distribution
+
+| Department | Accounts |
+|---|---:|
+| Executive | 1 |
+| IT | 2 |
+| Human Resources | 2 |
+| Finance | 2 |
+| Security | 3 |
+| Operations | 1 |
+| Legal and Compliance | 1 |
+| Total | 12 |
+
+#### Findings
+
+**Finding 1 — Organizational attributes**
+
+The retrieved department and job-title values correspond to the expected AFS employee directory records.
+
+**Finding 2 — Departmental OU placement**
+
+The Distinguished Names show that employee accounts are located in their respective departmental OUs, including specialized Security subdepartment OUs.
+
+**Finding 3 — Account status**
+
+All 12 retrieved accounts were enabled. This confirms their directory account status but does not establish continued employment or business authorization.
+
+**Finding 4 — Directory object naming**
+
+The retained SOC account was returned with:
+
+- Name: `SOC Lab User`
+- SamAccountName: `soc.user`
+- Department: Security
+- Title: SOC Analyst
+- Enabled: True
+
+The directory object name differs from the employee's known display identity, Kofi Mensah.
+
+The `Name` attribute and `DisplayName` attribute are distinct. Further verification is required before recommending a change.
+
+#### Security and Governance Analysis
+
+Accurate employee attributes and OU placement support identity administration, account lifecycle management and access governance.
+
+In production, directory records should be compared against an authoritative HR source to establish whether accounts, departments and job titles remain accurate.
+
+An enabled account should not automatically be treated as an authorized or currently required account.
+
+#### Verification
+
+**PASSED** — Employee account inventory retrieved successfully.
+
+- 12 accounts returned.
+- 12 accounts enabled.
+- Seven departments represented.
+- Departmental OU placement observed.
+- One directory naming item identified for further review.
+
+**Configuration changes:** None.
+
+**Remediation:** Deferred pending additional verification.
+
 
 ## 10. Comparing the Directory Against the Approved Architecture
 
