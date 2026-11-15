@@ -215,21 +215,91 @@ Further assessment is required before deciding whether restructuring is necessar
 
 ### Step 3 — Reviewing Departmental, Role-Based and Privileged Groups
 
-**Business purpose:** Establish how enterprise security groups are organized and identify the groups used to support role-based access management.
+**Business purpose:** Assess how enterprise security groups are organized and documented to support identity administration, role-based access management and privileged access governance.
 
-**Status:** Pending execution.
+**System:** AD-DC01
 
-Planned assessment:
+**Tool:** Active Directory PowerShell Module
 
-- Retrieve security groups within the Groups OU.
-- Identify group scope and category.
-- Review group naming conventions.
-- Identify the proposed Vulnerability Engineer group if it already exists.
-- Record groups requiring further membership review.
+#### Command Executed
 
-**Expected evidence:** Group inventory and analysis.
+```powershell
+Get-ADGroup -SearchBase "OU=Groups,OU=ApexFinancialServices,DC=corp,DC=lab" -SearchScope Subtree -Filter * -Properties Description | Sort-Object Name | Select-Object Name,GroupScope,GroupCategory,Description,DistinguishedName | Format-List
+```
 
-No group modifications are authorized during this step.
+#### Actual Results
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active2.png?raw=true)
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active3.png?raw=true)
+
+The command successfully retrieved 16 security groups.
+
+| Group classification | Count |
+|---|---:|
+| Department groups | 7 |
+| Role groups | 6 |
+| Existing SOC and standard-user groups | 2 |
+| Privileged groups | 1 |
+| Total | 16 |
+
+All returned groups were identified as Global Security groups.
+
+#### Findings
+
+**Finding 1 — Consistent group classification**
+
+All 16 groups use Global scope and Security category.
+
+This establishes a consistent group classification across the retrieved inventory. Membership and effective permissions have not yet been assessed.
+
+**Finding 2 — Generic and outdated group descriptions**
+
+The following groups contain descriptions requiring administrative review:
+
+- `GG_IT_Administrators` — Description references SOC lab security rather than its IT administrative purpose.
+- `GG_SOC_Analysts` — Description is generic and does not explain the group's specific access purpose.
+- `GG_Standard_Users` — Description contains legacy SOC lab wording.
+
+Other department and role groups also use generic descriptions. More specific descriptions should identify their intended business purpose.
+
+**Finding 3 — Vulnerability Analyst group identified**
+
+`GG_ROLE_VULN_ANALYST` exists under the Role Groups OU.
+
+**Finding 4 — Vulnerability Engineer group not identified**
+
+No `GG_ROLE_VULN_ENGINEER` group appeared in the retrieved inventory.
+
+This is a potential gap against the expanded AFS role design. No group creation is authorized under this assessment.
+
+**Finding 5 — Privileged group organization**
+
+`GG_IT_Administrators` is stored under the Privileged Groups OU.
+
+Its actual membership, effective privileges and resource permissions have not yet been verified.
+
+#### Security and Governance Analysis
+
+Accurate group naming, classification and descriptions support access governance, directory administration and auditability.
+
+Generic descriptions can make it harder for administrators and auditors to understand a group's intended purpose.
+
+The presence of a group under a Privileged Groups OU does not, by itself, prove that it has administrative privileges.
+
+#### Verification
+
+**PASSED** — The group inventory was retrieved successfully.
+
+- Total groups returned: 16.
+- All returned groups: Global Security.
+- Group descriptions retrieved.
+- Existing Vulnerability Analyst group identified.
+- Proposed Vulnerability Engineer group not identified.
+
+**Configuration changes:** None.
+
+**Remediation:** Deferred pending group membership and access-design reviews.
+
 
 ## 9. Reviewing Employee and Computer Account Placement
 
