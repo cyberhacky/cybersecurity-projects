@@ -64,11 +64,8 @@ Incorrect OU organization can complicate administration, policy application and 
 
 ### Step 1 — Domain Controller Verification
 
-**Execution date:** 15 November 2026
 
 **System:** AD-DC01
-
-**Commands executed:**
 
 ```powershell
 hostname
@@ -79,6 +76,8 @@ Get-Service NTDS, DNS
 ```
 
 ### Actual Results
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active.png?raw=true)
 
 | Attribute | Observed Result |
 |---|---|
