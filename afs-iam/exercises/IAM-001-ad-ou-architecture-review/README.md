@@ -478,41 +478,316 @@ Further investigation would be required to establish asset ownership, last logon
 Attach the actual PowerShell output screenshot to this section.
 
 
-## 10. Comparing the Directory Against the Approved Architecture
+## 10. Assessing Active Directory Against the Approved Organizational Design
 
-### Step 5 — Assessing Organizational Design Compliance
+### Step 5 — Conducting an IAM Architecture and Governance Review
 
-Compare the actual directory hierarchy and object placement against AFS Master Project Blueprint v1.1.
+**Business purpose:** Compare the implemented Active Directory environment against the approved organizational design, identify administrative discrepancies and prepare recommendations for identity governance improvement.
 
-Review:
+**Assessment date:** 15 November 2026
 
-- Departmental organization.
-- Security subdepartment organization.
-- Infrastructure organization.
-- Group storage locations.
-- Service account separation.
-- Disabled account organization.
+**Assessment system:** AD-DC01
 
-**Status:** In Progress.
+**Evidence sources:**
+- IAM-001 Step 2 — OU hierarchy inventory.
+- IAM-001 Step 3 — Security group inventory.
+- IAM-001 Step 4A — Employee identity inventory.
+- IAM-001 Step 4B — Computer account inventory.
+- AFS Enterprise Cybersecurity Lab Master Blueprint v1.1.
 
-**Known deviation:** Missing `Departments` parent OU.
+### Assessment Findings
 
-## 11. Documenting Findings and Administrative Recommendations
+| Finding ID | Area | Observation | Assessment |
+|---|---|---|---|
+| IAM-001-F01 | OU architecture | Department OUs are not nested under the planned Departments OU | Design deviation |
+| IAM-001-F02 | Group documentation | Several security group descriptions are generic or outdated | Documentation weakness |
+| IAM-001-F03 | Role design | Proposed GG_ROLE_VULN_ENGINEER was not identified | Role design gap |
+| IAM-001-F04 | Identity attributes | SOC Lab User object name differs from the known employee identity | Requires verification |
+| IAM-001-F05 | Asset inventory | Infrastructure OU query returned CLIENT01 only | Limited assessment scope |
 
-### Step 6 — Preparing the IAM Assessment Record
+### Finding Analysis and Recommendations
 
-Document:
+**F01 — Departmental OU architecture**
 
-- Verified directory structures.
-- Observed deviations.
-- Supporting evidence.
-- Administrative implications.
-- Recommended corrective actions.
-- Outstanding questions and limitations.
+The implemented department OU hierarchy differs from the approved blueprint.
 
-No remediation will be performed without an approved change decision.
+Recommendation: Review administrative, Group Policy and delegation implications before proposing any restructuring. No OU movement is authorized by this assessment.
 
-**Status:** Pending completion of the assessment.
+**F02 — Security group documentation**
+
+Several groups have generic or outdated descriptions.
+
+Recommendation: Establish clear descriptions and ownership requirements to improve group administration and auditability.
+
+**F03 — Vulnerability Engineer role**
+
+The proposed role group was not present in the retrieved group inventory.
+
+Recommendation: Review the distinction between vulnerability analyst and vulnerability engineer responsibilities before approving a separate group.
+
+**F04 — SOC identity naming**
+
+The retained SOC account has the directory object name SOC Lab User, while the known employee identity is Kofi Mensah.
+
+Recommendation: Verify the Name and DisplayName attributes and confirm the approved naming convention before considering any change.
+
+**F05 — Computer inventory coverage**
+
+The computer inventory was limited to the Infrastructure OU and returned CLIENT01.
+
+Recommendation: Perform a separately scoped domain-wide computer inventory if complete domain coverage is required.
+
+### Assessment Limitations
+
+The findings are based on read-only directory inventory.
+
+This assessment has not established effective permissions, excessive group privileges, policy application failures, stale accounts or actual exploitation.
+
+The observations should not be represented as confirmed security vulnerabilities.
+
+### Overall Assessment Status
+
+**Step 5: Preliminary findings documented.**
+
+All five observations require consideration within the broader IAM governance process.
+
+**Active Directory configuration changes:** None.
+
+
+
+# 11. Preparing the IAM Assessment Report and Remediation Recommendations
+
+## Step 6 — Preparing the Active Directory IAM Assessment Report
+
+### 6.1 Executive Summary
+
+An Active Directory organizational structure and identity governance assessment was conducted within the Apex Financial Services (AFS) training environment.
+
+The assessment examined the organizational unit hierarchy, enterprise security groups, employee identity records and computer account placement.
+
+PowerShell and the Active Directory module were used to retrieve directory information and compare the implemented configuration against the approved AFS organizational design.
+
+The assessment identified five observations requiring documentation, further review or administrative consideration.
+
+No Active Directory configuration changes were performed.
+
+### 6.2 Assessment Scope
+
+The assessment covered:
+
+- Active Directory domain and service verification.
+- Organizational unit hierarchy.
+- Departmental, role-based and privileged security group inventory.
+- Employee identity attributes and account status.
+- Employee organizational unit placement.
+- Computer account inventory within the Infrastructure OU.
+- Comparison against the approved AFS organizational design.
+
+**Assessment environment:** `corp.lab`
+
+**Domain controller:** AD-DC01
+
+**Assessment workstation:** CLIENT01
+
+**Assessment approach:** Read-only PowerShell inventory and configuration review.
+
+### 6.3 Assessment Methodology
+
+| Step | Activity | Evidence |
+|---|---|---|
+| 1 | Confirm Active Directory environment | Domain and service verification |
+| 2 | Review organizational structure | OU inventory |
+| 3 | Review enterprise security groups | Group inventory |
+| 4A | Review employee identity records | User inventory |
+| 4B | Review computer account placement | Computer inventory |
+| 5 | Compare against approved architecture | Preliminary findings register |
+| 6 | Prepare assessment report | This report |
+
+### 6.4 Assessment Findings
+
+#### Finding F01 — Departmental OU Architecture Deviation
+
+**Observation:**
+
+The approved AFS blueprint specifies a `Departments` parent OU. The implemented directory places department OUs directly under `ApexFinancialServices`.
+
+**Evidence:**
+
+The OU inventory retrieved the departmental Distinguished Names and confirmed their current locations.
+
+**Potential implications:**
+
+- Differences between documented and implemented architecture.
+- Changes to future Group Policy targeting and inheritance design.
+- Differences in delegated administration planning.
+
+**Recommendation:**
+
+Review the organizational design with the directory administration team. Approve any proposed restructuring through formal change control.
+
+**Status:** Confirmed design deviation; remediation decision pending.
+
+#### Finding F02 — Generic and Outdated Security Group Descriptions
+
+**Observation:**
+
+Several security groups have descriptions that do not clearly communicate their intended business purpose.
+
+Examples:
+
+- `GG_IT_Administrators`
+- `GG_SOC_Analysts`
+- `GG_Standard_Users`
+
+**Evidence:**
+
+The Active Directory group inventory retrieved the Description attribute for all 16 groups.
+
+**Potential implications:**
+
+- Difficulty understanding group purpose.
+- Less effective access reviews.
+- Increased administrative ambiguity.
+- Inconsistent identity governance documentation.
+
+**Recommendation:**
+
+Establish a group-description standard that includes business purpose, intended membership and accountable ownership.
+
+Review existing descriptions and update them only after the intended group purpose has been confirmed.
+
+**Status:** Documentation weakness identified; corrective action pending.
+
+#### Finding F03 — Vulnerability Engineer Role Group Not Identified
+
+**Observation:**
+
+The retrieved security group inventory contains `GG_ROLE_VULN_ANALYST`, but does not contain `GG_ROLE_VULN_ENGINEER`.
+
+**Evidence:**
+
+The inventory returned 16 groups under the AFS Groups OU.
+
+**Potential implications:**
+
+The current role-group design may not distinguish vulnerability analysis responsibilities from vulnerability engineering responsibilities.
+
+However, a separate group is not automatically necessary. The actual access requirements must justify the distinction.
+
+**Recommendation:**
+
+Review the proposed Vulnerability Engineer responsibilities and access requirements with the IAM and Vulnerability Management teams.
+
+Create a separate role group only if an approved access model requires it.
+
+**Status:** Design gap requiring business approval.
+
+#### Finding F04 — SOC Account Directory Object Naming Requires Verification
+
+**Observation:**
+
+The retained SOC account was returned with the following attributes:
+
+- Directory object name: `SOC Lab User`
+- SamAccountName: `soc.user`
+- Department: Security
+- Title: SOC Analyst
+- Enabled: True
+
+The known employee identity associated with this account is Kofi Mensah.
+
+**Evidence:**
+
+The employee identity inventory returned the account's Name and SamAccountName attributes.
+
+**Potential implications:**
+
+Differences between directory object naming and employee-facing identity information can create administrative ambiguity.
+
+**Recommendation:**
+
+Verify the account's DisplayName, GivenName and Surname attributes. Confirm the approved naming convention before proposing a directory object rename.
+
+**Status:** Requires additional verification.
+
+#### Finding F05 — Computer Inventory Search Scope Limitation
+
+**Observation:**
+
+The computer inventory query returned CLIENT01 from the AFS Infrastructure OU.
+
+AD-DC01 is stored in the separate Domain Controllers OU and was outside the search scope.
+
+**Evidence:**
+
+The Get-ADComputer query used the Infrastructure OU as its SearchBase.
+
+**Potential implications:**
+
+Reporting the result as a complete domain computer inventory would produce an inaccurate representation of directory coverage.
+
+**Recommendation:**
+
+Use a separately scoped domain-wide computer inventory when complete domain coverage is required. Record exclusions and search boundaries in future assessment reports.
+
+**Status:** Assessment limitation confirmed.
+
+### 6.5 Remediation Recommendation Register
+
+| Finding | Recommended action | Proposed responsibility |
+|---|---|---|
+| F01 | Review and approve OU architecture alignment | IAM / AD Administration |
+| F02 | Standardize group descriptions and ownership | IAM |
+| F03 | Validate Vulnerability Engineer access requirements | IAM / Vulnerability Management |
+| F04 | Verify SOC identity attributes | IAM |
+| F05 | Expand computer inventory coverage where required | IAM / AD Administration |
+
+These are proposed responsibilities, not confirmed organizational assignments.
+
+### 6.6 Risk Assessment Limitations
+
+This assessment did not establish:
+
+- Unauthorized access or excessive permissions.
+- Effective access to shared resources.
+- Privileged group membership risks.
+- Group Policy application failures.
+- Stale or orphaned account activity.
+- Endpoint patch compliance.
+- Successful or unsuccessful exploitation.
+
+No severity rating is assigned to the five observations at this stage.
+
+Further technical validation and business context are required before assigning formal risk levels.
+
+### 6.7 Change Control and Remediation Status
+
+No directory configuration changes were made during this exercise.
+
+All recommendations remain subject to:
+
+1. Technical review.
+2. Business approval.
+3. Change authorization.
+4. Controlled implementation.
+5. Post-change verification.
+
+No remediation should be reported as completed until implementation and verification evidence exist.
+
+### 6.8 Assessment Conclusion
+
+The AFS Active Directory environment was successfully inventoried across its organizational structure, security groups, employee accounts and selected computer accounts.
+
+The review identified architectural and documentation discrepancies and areas requiring additional verification.
+
+The findings provide a basis for subsequent IAM governance and access-control exercises.
+
+**Assessment conclusion:** Preliminary findings documented.
+
+**Configuration changes:** None.
+
+**Remediation status:** Pending review and approval.
+
 
 ## 12. Security and Governance Analysis
 
