@@ -106,3 +106,85 @@ However, group membership alone does not establish effective access. Nested memb
 **Configuration changes:** None.
 
 **Remediation:** Deferred pending subsequent RBAC validation.
+
+
+## Step 2 — Validating Departmental Group Assignments
+
+### Business Purpose
+
+Validate that employee departmental attributes correspond to their expected Active Directory departmental security group assignments.
+
+This activity simulates an IAM Analyst performing an access governance control to identify missing, unexpected or inconsistent departmental group memberships.
+
+**Execution date:** 16 November 2026
+
+**System:** AD-DC01
+
+**Tool:** PowerShell and Active Directory PowerShell Module
+
+### Validation Method
+
+A PowerShell script retrieved employee records from the AFS organizational unit and compared each employee's Department attribute against the approved departmental group mapping.
+
+![Image Alt](https://github.com/cyberhacky/cybersecurity-projects/blob/main/afs-iam/exercises/IAM-001-ad-ou-architecture-review/active9.png?raw=true)
+
+The script examined direct group memberships and reported the validation result for each employee.
+
+### Departmental Group Mapping
+
+| Department | Expected group |
+|---|---|
+| Executive | GG_DEPT_EXECUTIVE |
+| IT | GG_DEPT_IT |
+| Human Resources | GG_DEPT_HR |
+| Finance | GG_DEPT_FINANCE |
+| Security | GG_DEPT_SECURITY |
+| Operations | GG_DEPT_OPERATIONS |
+| Legal and Compliance | GG_DEPT_LEGAL |
+
+### Actual Results
+
+The script successfully evaluated 12 employee accounts.
+
+| Validation result | Count |
+|---|---:|
+| MATCH | 12 |
+| MISSING_EXPECTED_GROUP | 0 |
+| MULTIPLE_DEPARTMENT_GROUPS | 0 |
+| NO_DEPARTMENT_MAPPING | 0 |
+| Total | 12 |
+
+### Findings
+
+**Finding 1 — Departmental group alignment**
+
+All 12 employee accounts had the expected direct departmental security group based on their recorded Department attribute.
+
+**Finding 2 — No departmental membership discrepancies reported**
+
+The script did not identify any missing expected departmental groups or multiple direct departmental group assignments.
+
+### Security and Governance Analysis
+
+Consistent departmental group assignments support structured access administration and provide a foundation for role-based access governance.
+
+However, matching departmental group membership does not independently establish appropriate resource permissions or effective access.
+
+Additional validation is required for role-based groups, nested memberships, privileged access and resource permissions.
+
+### Verification
+
+**PASSED**
+
+- Employee accounts evaluated: 12.
+- Departmental group matches: 12.
+- Reported discrepancies: 0.
+- Active Directory changes: None.
+
+**Assessment limitation:** Validation was limited to the departmental group mapping defined in the script and direct memberships reported by Active Directory.
+
+### Evidence
+
+Attach the actual PowerShell validation output and summary screenshot.
+
+**Exercise status:** Step 2 completed and verified.
