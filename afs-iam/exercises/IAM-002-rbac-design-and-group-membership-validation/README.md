@@ -106,7 +106,3 @@ However, group membership alone does not establish effective access. Nested memb
 **Configuration changes:** None.
 
 **Remediation:** Deferred pending subsequent RBAC validation.
-
-### Evidence
-
-Attach the actual PowerShell output screenshot to this section.
