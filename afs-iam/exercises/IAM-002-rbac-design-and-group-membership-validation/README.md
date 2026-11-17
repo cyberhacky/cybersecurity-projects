@@ -116,13 +116,82 @@ Validate that employee departmental attributes correspond to their expected Acti
 
 This activity simulates an IAM Analyst performing an access governance control to identify missing, unexpected or inconsistent departmental group memberships.
 
-**Execution date:** 16 November 2026
-
 **System:** AD-DC01
 
 **Tool:** PowerShell and Active Directory PowerShell Module
 
 ### Validation Method
+
+
+Import-Module ActiveDirectory
+
+$departmentGroupMap = @{
+    "Executive"             = "GG_DEPT_EXECUTIVE"
+    "IT"                    = "GG_DEPT_IT"
+    "Human Resources"       = "GG_DEPT_HR"
+    "Finance"               = "GG_DEPT_FINANCE"
+    "Security"              = "GG_DEPT_SECURITY"
+    "Operations"            = "GG_DEPT_OPERATIONS"
+    "Legal and Compliance"  = "GG_DEPT_LEGAL"
+}
+
+$users = Get-ADUser `
+    -SearchBase "OU=ApexFinancialServices,DC=corp,DC=lab" `
+    -SearchScope Subtree `
+    -Filter * `
+    -Properties Department,Title,Enabled,MemberOf
+
+$results = foreach ($user in $users) {
+
+    $directGroups = @(
+        $user.MemberOf | ForEach-Object {
+            (($_ -split ",")[0] -replace "^CN=")
+        }
+    )
+
+    $expectedGroup = $departmentGroupMap[$user.Department]
+
+    $assignedDepartmentGroups = @(
+        $directGroups | Where-Object {
+            $_ -like "GG_DEPT_*"
+        }
+    )
+
+    if (-not $expectedGroup) {
+        $status = "NO_DEPARTMENT_MAPPING"
+    }
+    elseif ($expectedGroup -notin $assignedDepartmentGroups) {
+        $status = "MISSING_EXPECTED_GROUP"
+    }
+    elseif ($assignedDepartmentGroups.Count -gt 1) {
+        $status = "MULTIPLE_DEPARTMENT_GROUPS"
+    }
+    else {
+        $status = "MATCH"
+    }
+
+    [PSCustomObject]@{
+        Employee                 = $user.Name
+        Username                 = $user.SamAccountName
+        Department               = $user.Department
+        ExpectedDepartmentGroup  = $expectedGroup
+        AssignedDepartmentGroups = $assignedDepartmentGroups -join "; "
+        ValidationResult         = $status
+    }
+}
+
+$results |
+    Sort-Object Department,Employee |
+    Format-Table -Wrap -AutoSize
+
+Write-Host "`n===== VALIDATION SUMMARY ====="
+
+$results |
+    Group-Object ValidationResult |
+    Select-Object Name,Count |
+    Format-Table -AutoSize
+
+
 
 A PowerShell script retrieved employee records from the AFS organizational unit and compared each employee's Department attribute against the approved departmental group mapping.
 
